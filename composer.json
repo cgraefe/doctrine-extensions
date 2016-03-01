@@ -1,0 +1,26 @@
+{
+    "name": "graefe/doctrine-extensions",
+    "version": "0.1.0",
+    "description": "Collection of useful types and other minor extensions to Doctrine DBAL and ORM.",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Christian Graefe",
+            "email": "code@graefe.net"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "php": ">=5.5.9",
+        "doctrine/dbal": "^2.5"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^5.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "Graefe\\Doctrine\\": "src"
+        }
+    }
+}
