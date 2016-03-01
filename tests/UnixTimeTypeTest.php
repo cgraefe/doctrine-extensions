@@ -18,19 +18,12 @@ class UnixTimeTypeTest extends PHPUnit_Framework_TestCase
     {
         \Doctrine\DBAL\Types\Type::addType('unixtime', '\Graefe\Doctrine\Type\UnixTimeType');
 
-        $timezone = new DateTimeZone('UTC');
+        date_default_timezone_set('UTC');
 
         self::$dateCurrent = DateTime::createFromFormat('Y-m-d H:i:s', '2016-03-01 13:37:00');
-        self::$dateCurrent->setTimeZone($timezone);
-
         self::$dateFarFuture = DateTime::createFromFormat('Y-m-d H:i:s', '2048-03-01 13:37:00');
-        self::$dateFarFuture->setTimeZone($timezone);
-
-        self::$dateEndOfEpoch = DateTime::createFromFormat('Y-m-d H:i:s', '2038-01-19 04:14:07');
-        self::$dateEndOfEpoch->setTimeZone($timezone);
-
+        self::$dateEndOfEpoch = DateTime::createFromFormat('Y-m-d H:i:s', '2038-01-19 03:14:07');
         self::$dateLongPast = DateTime::createFromFormat('Y-m-d H:i:s', '1919-03-01 13:37:00');
-        self::$dateLongPast->setTimeZone($timezone);
     }
 
     /**
@@ -74,18 +67,18 @@ class UnixTimeTypeTest extends PHPUnit_Framework_TestCase
 
         $this->assertNull($type->convertToDatabaseValue(null, $this->getDatabasePlatformMock()));
 
-        $this->assertEquals(1456835820, $type->convertToDatabaseValue(self::$dateCurrent, $this->getDatabasePlatformMock()));
+        $this->assertEquals(1456839420, $type->convertToDatabaseValue(self::$dateCurrent, $this->getDatabasePlatformMock()));
         $this->assertEquals(2147483647, $type->convertToDatabaseValue(self::$dateEndOfEpoch, $this->getDatabasePlatformMock()));
-        $this->assertEquals(-1604316180, $type->convertToDatabaseValue(self::$dateLongPast, $this->getDatabasePlatformMock()));
+        $this->assertEquals(-1604312580, $type->convertToDatabaseValue(self::$dateLongPast, $this->getDatabasePlatformMock()));
     }
 
     public function testConvertToPHPValue()
     {
         $type = \Doctrine\DBAL\Types\Type::getType('unixtime');
         $this->assertNull($type->convertToPHPValue(null, $this->getDatabasePlatformMock()));
-        $this->assertEquals(self::$dateCurrent, $type->convertToPHPValue(1456835820, $this->getDatabasePlatformMock()));
+        $this->assertEquals(self::$dateCurrent, $type->convertToPHPValue(1456839420, $this->getDatabasePlatformMock()));
         $this->assertEquals(self::$dateEndOfEpoch, $type->convertToPHPValue(2147483647, $this->getDatabasePlatformMock()));
-        $this->assertEquals(self::$dateLongPast, $type->convertToPHPValue(-1604316180, $this->getDatabasePlatformMock()));
+        $this->assertEquals(self::$dateLongPast, $type->convertToPHPValue(-1604312580, $this->getDatabasePlatformMock()));
     }
 
 

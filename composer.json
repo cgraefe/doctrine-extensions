@@ -1,6 +1,5 @@
 {
     "name": "graefe/doctrine-extensions",
-    "version": "0.1.0",
     "description": "Collection of useful types and other minor extensions to the Doctrine DBAL and ORM.",
     "type": "library",
     "license": "MIT",
@@ -12,7 +11,7 @@
     ],
     "minimum-stability": "stable",
     "require": {
-        "php": ">=5.5.9",
+        "php": ">=5.6.0",
         "doctrine/dbal": "^2.5"
     },
     "require-dev": {
