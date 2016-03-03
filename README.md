@@ -5,6 +5,7 @@ Doctrine-Extensions
 
 This is a collection of useful types and other minor extensions to the Doctrine DBAL and ORM.
 
+
 UnixTimeType
 ------------
 UnixTimeType is a custom Doctrine mapping type for time-stamp values represented in unix time, i.e. seconds since Jan 1, 1970.
@@ -19,4 +20,30 @@ UnixTimeType is a custom Doctrine mapping type for time-stamp values represented
  * @ORM\Column(name="created", type="unixtime", nullable=false)
  */
 private $created;
+```
+
+
+MySqlEnumType
+-------------
+MySqlEnumType is an abstract base class for mapping ENUM types in MySQL.
+
+```php
+// Define type.
+class ShopModeType extends \Graefe\Doctrine\Type\MySqlEnumType
+{
+    protected function getValues() { return array('b2b','b2c'); }
+    public function getName() { return 'shopmode'; }
+}
+
+...
+
+// Register type during boot-strap.
+\Doctrine\DBAL\Types\Type::addType('shopmode', 'ShopModeType');
+
+...
+
+/**
+ * @ORM\Column(name="mode", type="shopmode", nullable=false)
+ */
+private $mode;
 ```
