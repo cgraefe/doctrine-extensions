@@ -1,7 +1,6 @@
 <?php
 
 
-
 /**
  * User: cgraefe
  * Date: 03.03.2016
@@ -15,19 +14,24 @@ class MySqlEnumTypeTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \Doctrine\DBAL\Platforms\AbstractPlatform|\PHPUnit_Framework_MockObject_MockObject
+     * @param string $name Name of the mocked db platform.
+     * @return \Doctrine\DBAL\Platforms\AbstractPlatform|PHPUnit_Framework_MockObject_MockObject
      */
-    protected function getDatabasePlatformMock()
+    protected function getDatabasePlatformMock($name = 'mysql')
     {
-        $mock = $this->getMockForAbstractClass(
-            'Doctrine\DBAL\Platforms\AbstractPlatform',
-            array(
+        $mock = $this->getMockBuilder('Doctrine\DBAL\Platforms\AbstractPlatform')
+            ->disableOriginalConstructor()
+            ->setMethods(array(
                 'getName',
-            )
-        );
+                'getVarcharTypeDeclarationSQL',
+            ))
+            ->getMockForAbstractClass();
         $mock->expects($this->any())
             ->method('getName')
-            ->will($this->returnValue('mysql'));
+            ->will($this->returnValue($name));
+        $mock->expects($this->any())
+            ->method('getVarcharTypeDeclarationSQL')
+            ->will($this->returnValue('VARCHAR ...'));
         return $mock;
     }
 
@@ -38,11 +42,29 @@ class MySqlEnumTypeTest extends PHPUnit_Framework_TestCase
         $this->assertInstanceOf('ShopModeType', $type);
     }
 
-    public function testGetSQLDeclaration ()
+    public function testGetSQLDeclaration()
     {
         $type = \Doctrine\DBAL\Types\Type::getType('shopmode');
         $declaration = $type->getSQLDeclaration([], $this->getDatabasePlatformMock());
         $this->assertStringStartsWith('ENUM', $declaration);
+    }
+
+    public function testGetSQLDeclarationDegradedSqliteSupport()
+    {
+        $type = \Doctrine\DBAL\Types\Type::getType('shopmode');
+        $declaration = $type->getSQLDeclaration([], $this->getDatabasePlatformMock('sqlite'));
+        $this->assertStringStartsWith('VARCHAR', $declaration);
+    }
+
+
+    /**
+     * @expectedException \UnexpectedValueException
+     */
+    public function testGetSQLDeclarationRejectsUnsupportedPlatforms()
+    {
+        $platform = $this->getDatabasePlatformMock('oracle or something');
+        $type = \Doctrine\DBAL\Types\Type::getType('shopmode');
+        $type->getSQLDeclaration([], $platform);
     }
 
     public function testConvertToDatabaseValue()
@@ -78,7 +100,7 @@ class ShopModeType extends \Graefe\Doctrine\Type\MySqlEnumType
 {
     protected function getValues()
     {
-        return array('b2b','b2c');
+        return array('b2b', 'b2c');
     }
 
     public function getName()
