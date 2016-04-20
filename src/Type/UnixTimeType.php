@@ -63,6 +63,8 @@ class UnixTimeType extends Type
             return $value;
         }
 
+        $value = intval($value);
+
         if ($value>=0 && $value<2147483648) {
             $val = \DateTime::createFromFormat('U', $value);
         } else {
