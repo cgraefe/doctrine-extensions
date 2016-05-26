@@ -47,3 +47,21 @@ class ShopModeType extends \Graefe\Doctrine\Type\MySqlEnumType
  */
 private $mode;
 ```
+
+RAND()
+-----
+The Rand class provides the RAND() function to DQL for selecting random rows. (Caveat: Improper use might
+cause serious performance problems.)
+
+```php
+// Register function.
+$em->getConfiguration()->addCustomNumericFunction('RAND', '\\Graefe\\Doctrine\\Functions\\Rand');
+
+...
+
+$qb->select('d')
+    ->addSelect('RAND() AS randval')
+    ->from('Dummy', 'd')
+    ->orderBy('randval')
+    ->setMaxResults(1);
+```
