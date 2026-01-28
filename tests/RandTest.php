@@ -1,4 +1,5 @@
 <?php
+use PHPUnit\Framework\TestCase;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Tools\Setup;
@@ -23,7 +24,7 @@ class Dummy
  * Date: 26.05.2016
  * Time: 13:38
  */
-class RandTest extends PHPUnit_Framework_TestCase
+class RandTest extends TestCase
 {
 
     /**

@@ -1,5 +1,5 @@
 <?php
-
+use PHPUnit\Framework\TestCase;
 use Graefe\Doctrine\Type;
 
 /**
@@ -7,14 +7,14 @@ use Graefe\Doctrine\Type;
  * Date: 01.03.2016
  * Time: 09:23
  */
-class UnixTimeTypeTest extends PHPUnit_Framework_TestCase
+class UnixTimeTypeTest extends TestCase
 {
     static private $dateCurrent;
     static private $dateFarFuture;
     static private $dateEndOfEpoch;
     static private $dateLongPast;
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         \Doctrine\DBAL\Types\Type::addType('unixtime', '\Graefe\Doctrine\Type\UnixTimeType');
 

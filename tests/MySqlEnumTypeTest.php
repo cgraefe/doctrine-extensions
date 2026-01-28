@@ -1,14 +1,14 @@
 <?php
-
+use PHPUnit\Framework\TestCase;
 
 /**
  * User: cgraefe
  * Date: 03.03.2016
  * Time: 16:59
  */
-class MySqlEnumTypeTest extends PHPUnit_Framework_TestCase
+class MySqlEnumTypeTest extends TestCase
 {
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         \Doctrine\DBAL\Types\Type::addType('shopmode', 'ShopModeType');
     }
